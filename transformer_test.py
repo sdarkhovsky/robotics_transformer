@@ -42,7 +42,7 @@ class TransformerTest(parameterized.TestCase):
         vocab_size=self._vocab_size,
         return_attention_scores=return_attention_scores)
 
-    output_tokens, attention_scores = network(self._tokens, attention_mask=None)
+    output_tokens, attention_scores = network(self._tokens, training=return_attention_scores, attention_mask=None)
     self.assertSequenceEqual(self._tokens.shape.as_list(),
                              output_tokens.shape.as_list())
     if return_attention_scores:
