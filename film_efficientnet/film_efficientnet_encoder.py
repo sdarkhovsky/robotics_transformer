@@ -416,7 +416,7 @@ def EfficientNet(width_coefficient,
 
   if include_film:
     with tf.compat.v1.variable_scope('context_input'):
-      context_input = layers.Input(shape=512)
+      context_input = layers.Input(shape=(512,))
   if input_tensor is None:
     img_input = layers.Input(shape=input_shape)
   else:

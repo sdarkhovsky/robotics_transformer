@@ -88,7 +88,7 @@ class RT1ImageTokenizer(tf.keras.layers.Layer):
         context = tf.reshape(context, [b * t, tf.shape(context)[-1]])
     tokens = self.get_image_embeddings(image, context, training)
     if self._use_token_learner:
-      tokens = self._token_learner(tokens, training)
+      tokens = self._token_learner(tokens, training = training)
     # Unflatten the time axis, which was previously flattened into the batch.
     tokens = tf.reshape(tokens, [b, t, tf.shape(tokens)[1], -1])
     return tokens

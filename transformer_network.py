@@ -239,7 +239,7 @@ class TransformerNetwork(network.Network):
 
     # run transformer
     output_tokens, self._attention_scores = self._transformer(
-        input_token_sequence, training, attention_mask)
+        input_token_sequence, training = training, attention_mask = attention_mask)
     return output_tokens
 
   def _get_tokens_and_mask(self,
@@ -268,6 +268,25 @@ class TransformerNetwork(network.Network):
     token = tf.argmax(token_logits, axis=-1, output_type=tf.int32)
 
     return token, token_logits
+
+  def build(self, input_shape):
+    # fixing an exception
+    '''
+    /home/sd/miniconda3/envs/google-research_robotics_transformer/lib/python3.12/site-packages/keras/src/layers/layer.py:1407: UserWarning: Layer 'transformer_network' looks like it has unbuilt state, but Keras is not able to trace the layer `call()` in order to build it automatically. Possible causes:
+    1. The `call()` method of your layer may be crashing. Try to `__call__()` the layer eagerly on some test input first to see if it works. E.g. `x = np.random.random((3, 4)); y = layer(x)`
+    2. If the `call()` method is correct, then you may need to implement the `def build(self, input_shape)` method on your layer. It should create all variables used by the layer (e.g. by calling `layer.build()` on all its children layers).
+    Exception encountered: ''Exception encountered when calling Transformer.call().
+
+    '__transformer_layer' is not a valid root scope name. A root scope name has to match the following pattern: ^[A-Za-z0-9.][A-Za-z0-9_.\\/>-]*$
+
+    Arguments received by Transformer.call():
+      • x=tf.Tensor(shape=(1, 48, 512), dtype=float32)
+      • training=False
+      • attention_mask=tf.Tensor(shape=(48, 48), dtype=float32)''
+      warnings.warn(
+    /home/sd/miniconda3/envs/google-research_robotics_transformer/lib/python3.12/site-packages/keras/src/layers/layer.py:395: UserWarning: `build()` was called on layer 'transformer_network', however the layer does not have a `build()` method implemented and it looks like it has unbuilt state. This will cause the layer to be marked as built, despite not being actually built, which may cause failures down the line. Make sure to implement a proper `build()` method.
+    '''
+    super().build(input_shape)
 
   def call(self,
            observations: dict[str, tf.Tensor],
